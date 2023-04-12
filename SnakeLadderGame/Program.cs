@@ -10,38 +10,50 @@ namespace SnakeLadderGame
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to Snake Ladder Game");
-            int position = 0; // starting position
-            Random rand = new Random();
+            const int WinPosition = 100;
+            int position = 0;
 
-            while (position < 100)
-            { // game loop
-              // Roll the die and get a random number between 1 and 6
-                int roll = rand.Next(1, 7);
-                Console.WriteLine("You rolled a " + roll);
+            Random random = new Random();
 
-                // Check for options (No Play, Ladder, or Snake)
-                int option = rand.Next(0, 3);
+            while (position < WinPosition)
+            {
+                //Player rolls the die to get a number between 1 to 6
+                int dieRoll = random.Next(1, 7);
+
+                //Player checks for an option
+                int option = random.Next(0, 3); // 0: No Play, 1: Ladder, 2: Snake
+
                 switch (option)
                 {
                     case 0:
-                        Console.WriteLine("No Play. You stay at position " + position);
+                        // No Play
                         break;
                     case 1:
-                        Console.WriteLine("You climbed a ladder to position " + (position + roll));
-                        position += roll;
+                        // Ladder
+                        position += dieRoll;
                         break;
                     case 2:
-                        Console.WriteLine("You slid down a snake to position " + (position - roll));
-                        position -= roll;
-                        if (position < 0) position = 0; // ensure position doesn't go below 0
+                        // Snake
+                        position -= dieRoll;
                         break;
                 }
 
-                Console.WriteLine("Your current position is " + position);
+                // Ensure position is within bounds
+                position = Math.Max(0, position);
+                position = Math.Min(WinPosition, position);
+
+                Console.WriteLine($"Rolled a {dieRoll}, landed on {position}");
             }
 
-            Console.WriteLine("Congratulations, you won!");
+            Console.WriteLine("You won!");
+
+            // Reset game if player wants to play again
+            Console.WriteLine("Do you want to play again? (y/n)");
+            string answer = Console.ReadLine();
+            if (answer.ToLower() == "y")
+            {
+                Main(args); // Recursive call to start a new game
+            }
             Console.ReadLine();
         }
     }
